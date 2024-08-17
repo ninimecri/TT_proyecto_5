@@ -41,13 +41,16 @@ if st.checkbox('Mostrar Histograma Interactivo'):
     fig_hist_interactive.update_layout(
         xaxis_title='Precio',
         yaxis_title='Frecuencia',
-        xaxis=dict(rangeselector=dict(buttons=[dict(count=1, label="1m", step="month", stepmode="backward"),
-                                               dict(
-                                                   count=6, label="6m", step="month", stepmode="backward"),
-                                               dict(step="all")],
-                                      visible=True),
-                   rangeslider=dict(visible=True),
-                   type="date")
+        xaxis=dict(
+            title='Precio',
+            showgrid=True,
+            zeroline=False
+        ),
+        yaxis=dict(
+            title='Frecuencia',
+            showgrid=True,
+            zeroline=False
+        )
     )
     st.plotly_chart(fig_hist_interactive)
 
@@ -64,13 +67,16 @@ if st.checkbox('Mostrar Gráfico de Dispersión Interactivo'):
     fig_scatter_interactive.update_layout(
         xaxis_title='Precio',
         yaxis_title='Condición',
-        xaxis=dict(rangeselector=dict(buttons=[dict(count=1, label="1m", step="month", stepmode="backward"),
-                                               dict(
-                                                   count=6, label="6m", step="month", stepmode="backward"),
-                                               dict(step="all")],
-                                      visible=True),
-                   rangeslider=dict(visible=True),
-                   type="linear"),
-        yaxis=dict(type="category")
+        xaxis=dict(
+            title='Precio',
+            showgrid=True,
+            zeroline=False
+        ),
+        yaxis=dict(
+            title='Condición',
+            showgrid=True,
+            zeroline=False,
+            type='category'
+        )
     )
     st.plotly_chart(fig_scatter_interactive)
