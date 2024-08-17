@@ -11,7 +11,6 @@ hist_button = st.button('Construccion histograma')
 
 # Botón para generar el histograma
 if st.button('Mostrar Histograma'):
-
     st.write("Histograma de la columna 'x'")
     fig = px.histogram(car_data, x='x', nbins=5)
     st.plotly_chart(fig)
