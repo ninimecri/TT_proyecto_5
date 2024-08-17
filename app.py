@@ -1,46 +1,76 @@
 import streamlit as st
 import pandas as pd
-import plotly_express as px
+import plotly.express as px
 
-car_data = pd.read_csv('vehicles_us.csv')  # leer los datos
+# Cargar datos
+car_data = pd.read_csv('vehicles_us.csv')
 
+# Mostrar las primeras filas del DataFrame
 print(car_data.head())
 
-st.header('Analisis de autos usados')
-hist_button = st.button('Construccion histograma')
+# Encabezado de la aplicación
+st.header('Proyecto 6: Análisis de Autos Usados')
 
 # Botón para generar el histograma
 if st.button('Mostrar Histograma'):
     st.write("Histograma de la distribución de Precios")
-    fig = px.histogram(car_data, x="price", title="Distribución de Precios de Vehículos",
-                       color_discrete_sequence=px.colors.qualitative.Set1)  # crear un histograma
-    st.plotly_chart(fig)
+    fig_hist = px.histogram(car_data, x="price", title="Distribución de Precios de Vehículos",
+                            color_discrete_sequence=px.colors.qualitative.Set1)
+    st.plotly_chart(fig_hist)
 
-scatter_button = st.button('Construccion gráfico de dispersión aqui')
-
-# Botón para generar el gráfico de dispersión
+# Convertir 'condition' a categórica para el gráfico de dispersión
 car_data['condition'] = car_data['condition'].astype('category')
 
+# Botón para generar el gráfico de dispersión
 if st.button('Mostrar Gráfico de Dispersión'):
+    st.write("Gráfico de dispersión de 'Precio' contra 'Condición'")
+    fig_scatter = px.scatter(car_data,
+                             x='price',
+                             y='condition',
+                             color='condition',
+                             title="Precio vs Condición de Vehículos",
+                             hover_data=["model_year", "odometer"],
+                             color_discrete_sequence=px.colors.qualitative.Set2)
+    st.plotly_chart(fig_scatter)
 
-    st.write("Gráfico de dispersión de 'Precio' contra 'Condicion'")
+# Casilla de verificación para un histograma interactivo
+if st.checkbox('Mostrar Histograma Interactivo'):
+    st.write("Histograma Interactivo de la columna 'price'")
+    fig_hist_interactive = px.histogram(car_data, x="price", title="Distribución de Precios de Vehículos",
+                                        color_discrete_sequence=px.colors.qualitative.Set1)
+    fig_hist_interactive.update_layout(
+        xaxis_title='Precio',
+        yaxis_title='Frecuencia',
+        xaxis=dict(rangeselector=dict(buttons=[dict(count=1, label="1m", step="month", stepmode="backward"),
+                                               dict(
+                                                   count=6, label="6m", step="month", stepmode="backward"),
+                                               dict(step="all")],
+                                      visible=True),
+                   rangeslider=dict(visible=True),
+                   type="date")
+    )
+    st.plotly_chart(fig_hist_interactive)
 
-    # Crear el gráfico de dispersión con diferenciación de colores basada en 'condition'
-    fig = px.scatter(car_data,
-                     x='price',
-                     y='condition',
-                     color='condition',
-                     title="Precio vs Condición de Vehículos",
-                     hover_data=["model_year", "odometer"],
-                     color_discrete_sequence=px.colors.qualitative.Set2)  # Colores claros
-
-    st.plotly_chart(fig)
-
-st.write("### Desafío Extra: Generar Gráficos con Casillas de Verificación")
-
-# Casilla de verificación para el histograma
-if st.checkbox('Generar Histograma'):
-    st.write("Histograma de la columna 'x'")
-    fig = px.histogram(car_data, x="price", title="Distribución de Precios de Vehículos",
-                       color_discrete_sequence=px.colors.qualitative.Set1)
-    st.plotly_chart(fig)
+# Casilla de verificación para el gráfico de dispersión
+if st.checkbox('Mostrar Gráfico de Dispersión Interactivo'):
+    st.write("Gráfico de dispersión de 'Precio' contra 'Condición'")
+    fig_scatter_interactive = px.scatter(car_data,
+                                         x='price',
+                                         y='condition',
+                                         color='condition',
+                                         title="Precio vs Condición de Vehículos",
+                                         hover_data=["model_year", "odometer"],
+                                         color_discrete_sequence=px.colors.qualitative.Set2)
+    fig_scatter_interactive.update_layout(
+        xaxis_title='Precio',
+        yaxis_title='Condición',
+        xaxis=dict(rangeselector=dict(buttons=[dict(count=1, label="1m", step="month", stepmode="backward"),
+                                               dict(
+                                                   count=6, label="6m", step="month", stepmode="backward"),
+                                               dict(step="all")],
+                                      visible=True),
+                   rangeslider=dict(visible=True),
+                   type="linear"),
+        yaxis=dict(type="category")
+    )
+    st.plotly_chart(fig_scatter_interactive)
